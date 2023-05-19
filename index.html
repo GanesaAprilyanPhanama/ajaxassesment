@@ -30,7 +30,7 @@
 
     <form id="apiForm">
         <label for="name">name:</label>
-        <input type="text" id="id" name="name"><br>
+        <input type="text" id=" name" name="name"><br>
     
         <label for="price">Price (Usd):</label>
         <input type="text" id="price" name="price"><br>
@@ -38,23 +38,78 @@
         <label for="marketcap">Market Cap:</label>
         <input type="text" id="marketcap" name="marketcap"><br>
     
-        <input type="submit" value="Submit">
+        <input type="submit" value="submit">
     </form>
-
 </body>
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
-      $('#tabel').DataTable({
-        "ajax": {
-          "url": "https://api.coincap.io/v2/assets",
-          "dataSrc": "data"
-        },
-        "columns": [
-          { "data": "name" },
-          { "data": "priceUsd" },
-          { "data": "marketCapUsd" }
-        ]
-      });
+        var dataTable = $('#tabel').DataTable({
+            "ajax": {
+            "url": "https://api.coincap.io/v2/assets",
+            "dataSrc": "data"
+            },
+            "columns": [
+            { "data": "name" },
+            { "data": "priceUsd" },
+            { "data": "marketCapUsd" }
+            ]
+        });
+    
+
+        $('#apiForm').on('submit', function(event){
+            event.preventDefault();
+
+            var nameInput = $('#name').val();
+            var priceInput = $('#price').val();
+            var marketcapInput = $('#marketcap').val();
+
+            var  isValid = true;
+            
+            if (nameInput === ''){
+                $('#name-error').show();
+                isValid == false;
+            } else{
+                $('#name-error').hide();
+            }
+
+            if (priceInput === ''){
+                $('#price-error').show();
+                isValid == false;
+            } else{
+                $('#price-error').hide();
+            }
+
+            if (marketcapInput === ''){
+                $('#marketcap-error').show();
+                isValid == false;
+            } else{
+                $('#marketcap-error').hide();
+            }
+            console.log(nameInput,priceInput,marketcapInput);
+            if (isValid){
+                dataTable.row.add({
+                    "name" : nameInput,
+                    "priceUsd": priceInput,
+                    "marketCapUsd":marketcapInput
+                }).draw(false);
+
+                $('#name').val('');
+                $('#price').val('');
+                $('#marketcap').val('');
+            }
+
+        });
     });
+
+    function validateInput(){
+        let x = document.getElementById("numb").value;
+        let text;
+        if(isNaN(x) || x < 1 || x > 10){
+            text = "input not valid";
+        } else {
+            text = "input ok";
+        }
+        document.getElementById("demo").innerHTML = text;
+    }
 </script>
 </html>
